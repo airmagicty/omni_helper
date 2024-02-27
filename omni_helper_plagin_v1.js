@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Omni Image & Commentator
-// @version      1.2
+// @version      1.3
 // @description  OMNI Helper
 // @author       I AM CHILLING & airmagicty
 // @match        https://omni.top-academy.ru/*
@@ -107,17 +107,16 @@ function formatPhrase(phrase, gender) {
 function IsMan(fullName) {
   // Убираем лишние пробелы и разбиваем на слова
   const words = `${fullName}`.trim().split(/\s+/);
-
   let result;
 
-  if (words.length < 2) {
-    // Если слов < 2, записываем последнюю букву первого слова в переменную
+  if (words.length > 0 && words.length <= 2) {
+    // Если слов +-1, записываем последнюю букву первого слова в переменную
     result = words[0] ? words[0].slice(-1) : null;
-  } else if (words.length > 3) {
-    // Если слов > 3, записываем последнюю букву последнего слова в переменную
+  } else if (words.length > 2) {
+    // Если слов > 1, записываем последнюю букву последнего слова в переменную
     result = words[words.length - 1].slice(-1);
   } else {
-    // Если слов от 2 до 3, записываем null в переменную
+    // Если ошибка, записываем null в переменную
     result = null;
   }
 
