@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Omni Image & Commentator
-// @version      1.3
+// @version      1.5
 // @description  OMNI Helper
 // @author       I AM CHILLING & airmagicty
 // @match        https://omni.top-academy.ru/*
@@ -239,16 +239,56 @@ div#FullscreenView {width: 100%; height: 0%; background: #252525de; position: ab
     })
 }
 
-function ProcessLoad(){
-    // Запуск функций
-    setInterval(updateComments, 1000);
+// Донат
+function postDonateText(textDonate) {
+  // Найти элемент <div> с нужными атрибутами
+  const targetDiv = document.querySelector('div[ui-view][class="ng-scope"]');
 
-    if(IsHomeWorksOpened() & CurrentHomeworks===null){
-        setTimeout(ShowImageIfAvaiable, 1000)
-    } else {setTimeout(ProcessLoad, 1000)}
+  if (targetDiv) {
+    // Создать новый элемент <div> с классом omni_helper_donate
+    const newDiv = document.createElement('div');
+    newDiv.style="padding: 4px 40px 10px 40px; font-size: 14px;"
+    
+    // Поместить текст из переменной omni_helper_donate_text
+    const omniHelperDonateText = `Ⓓ ${textDonate}`; // Замените этот текст на вашу переменную
+    newDiv.innerHTML = omniHelperDonateText;
+
+    // Вставить новый элемент внутрь найденного <div>
+    targetDiv.appendChild(newDiv);
+  } else {
+    console.error("Элемент <div> не найден");
+  }
+}
+
+function getTextFromGithub() {
+  let textDefault = `Вы используете плагин OMNI Helper. Плагин абсолютно бесплатный и существует исключительно за счет добровольных пожертвований. Поддержать автора можно тут: <a href="https://github.com/airmagicty/omni_helper">[поддержать]</a>`;
+
+  fetch('https://raw.githubusercontent.com/airmagicty/omni_helper/main/donate.md', { method: 'GET' })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Ошибка запроса');
+    }
+    return response.text();
+  })
+  .then(data => {
+    postDonateText(data);
+  })
+  .catch(error => {
+    postDonateText(textDefault);
+  });
 
 }
 
+// Инициализация
+function ProcessLoad(){
+  // Запуск функций
+  getTextFromGithub();
+  setInterval(updateComments, 1000);
+  if(IsHomeWorksOpened() & CurrentHomeworks===null){
+      setTimeout(ShowImageIfAvaiable, 1000)
+  } else {setTimeout(ProcessLoad, 1000)}
+}
+
 (function() {
-    ProcessLoad()
+  ProcessLoad()
 })();
