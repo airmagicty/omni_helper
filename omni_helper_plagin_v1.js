@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         OMNI Helper
-// @version      1.5
 // @description  Omni Image & Commentator
+// @version      1.5
 // @author       I AM CHILLING & airmagicty
 // @match        https://omni.top-academy.ru/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=top-academy.ru
+// @source       https://github.com/airmagicty/omni_helper
 // ==/UserScript==
 
 
