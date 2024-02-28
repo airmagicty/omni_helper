@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OMNI Helper
 // @description  Omni Image & Commentator
-// @version      1.5
+// @version      1.6
 // @author       I AM CHILLING & airmagicty
 // @match        https://omni.top-academy.ru/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=top-academy.ru
@@ -12,7 +12,7 @@
 // ========== OMNI COMMENTATOR ==========
 var buttonValue;
 
-const phrases = [
+const defaultPhrases = [
   ["Твоя работа просто восхитительна! Ты продемонстрировал{а} выдающееся понимание материала, выделившись среди своих одноклассников. Так держать!", 11, 12],
   ["Ты проделал{а} отличную работу. Твои усилия видны, и я впечатлен тем, насколько ты глубоко погружаешься в предмет. Продолжай в том же духе!", 10, 12],
   ["Прекрасная работа! Ты показываешь стабильные и качественные результаты. Твой труд и самодисциплина заметны. Продолжай стремиться к совершенству!", 10, 11],
@@ -34,6 +34,31 @@ const phrases = [
   ["Ты можешь лучше, не сдавайся. Твоя предыдущая работа оставляет желать лучшего. Сосредоточься на улучшении своих усилий и стремись к лучшим результатам.", 3, 3],
   ["Ты можешь сделать это лучше. Твои навыки требуют более тщательной проработки. Разберись с проблемными моментами и постарайся предоставить более качественные результаты.", 2, 2],
 ];
+
+// Получение фраз с гитхаба
+const phrasesUrl = 'https://raw.githubusercontent.com/airmagicty/omni_helper/main/phrases.json';
+var phrases = defaultPhrases;
+
+fetch(phrasesUrl)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Ошибка загрузки данных');
+    }
+    return response.text();
+  })
+  .then(data => {
+    try {
+      // Попытка распарсить данные и перезаписать массив phrases
+      const parsedPhrases = JSON.parse(data);
+      phrases = parsedPhrases;
+    } catch (error) {
+      console.log(data);
+      console.error(`Ошибка парсинга данных: ${error.message}`);
+    }
+  })
+  .catch(error => {
+    console.error(`Произошла ошибка: ${error.message}`);
+  });
 
 
 function getRandomPhrase(number, phrases) {
